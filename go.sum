@@ -27,8 +27,8 @@ github.com/jinzhu/inflection v1.0.0 h1:K317FqzuhWc8YvSVlFMCCUb36O/S9MCKRDI7QkRKD
 github.com/jinzhu/inflection v1.0.0/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=
 github.com/jinzhu/now v1.1.5 h1:/o9tlHleP7gOFmsnYNz3RGnqzefHA47wQpKrrdTIwXQ=
 github.com/jinzhu/now v1.1.5/go.mod h1:d3SSVoowX0Lcu0IBviAWJpolVfI5UJVZZ7cO71lE/z8=
-github.com/lily0749labs/goutils v0.2.0 h1:o6mJ0AVdAQr6uMfsslvi6fn8qnHdC3PnNN3c8OaLR+8=
-github.com/lily0749labs/goutils v0.2.0/go.mod h1:GooLo4IkwL8VQqeegz8DvPQu8lSfAtT5p4dFUvEGQIQ=
+github.com/lily0749labs/goutils v0.3.0 h1:cUPfQLCwvaVeh/fhQAoxmXtt+lH0c7QJ28uWO1slC6E=
+github.com/lily0749labs/goutils v0.3.0/go.mod h1:GooLo4IkwL8VQqeegz8DvPQu8lSfAtT5p4dFUvEGQIQ=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/redis/go-redis/v9 v9.7.3 h1:YpPyAayJV+XErNsatSElgRZZVCwXX9QzkKYNvO7x0wM=

@@ -1,50 +1,50 @@
 package queue
 
 import (
+	"context"
+	"sync/atomic"
 	"time"
+
+	queueutil "github.com/lily0749labs/goutils/queue"
 )
 
 type Queue struct {
-	data chan interface{}
-	len  int
-	exit bool
+	queue  *queueutil.Queue[any]
+	closed atomic.Bool
 }
 
 // 初始化队列的长度
 func NewQueue(max_queue_len int) (dc *Queue) {
-	dc = &Queue{exit: false}
-	dc.len = max_queue_len
-	dc.data = make(chan interface{}, max_queue_len)
-	return dc
+	return &Queue{
+		queue: queueutil.New[any](max_queue_len),
+	}
 }
 
 func (q *Queue) Push(data interface{}, waittime time.Duration) bool {
-	if q.exit {
+	if q.closed.Load() {
 		return false
 	}
-	click := time.After(waittime)
-	select {
-	case q.data <- data:
-		return true
-	case <-click:
-		return false
-	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), waittime)
+	defer cancel()
+	return q.queue.Push(ctx, data) == nil
 }
 
 func (q *Queue) Pop(waittime time.Duration) (data interface{}) {
-	if q.exit {
+	if q.closed.Load() {
 		return nil
 	}
-	click := time.After(waittime)
-	select {
-	case data = <-q.data:
-		return data
-	case <-click:
+
+	ctx, cancel := context.WithTimeout(context.Background(), waittime)
+	defer cancel()
+	data, err := q.queue.Pop(ctx)
+	if err != nil {
 		return nil
 	}
+	return data
 }
 
 func (q *Queue) Close() {
-	q.exit = true
-	close(q.data)
+	q.closed.Store(true)
+	q.queue.Close()
 }

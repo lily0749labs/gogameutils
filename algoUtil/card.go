@@ -3,6 +3,7 @@ package algoUtil
 import (
 	"fmt"
 	"github.com/lily0749labs/goutils/rand"
+	sliceutil "github.com/lily0749labs/goutils/slice"
 	"math"
 	mathrand "math/rand"
 	"strconv"
@@ -61,10 +62,7 @@ func Facards(cards []int32, handsnum int) ([]int32, []int32) {
 
 // 删除每个元素
 func Unset(index int, A []int32) []int32 {
-	if index < 0 || index >= len(A) {
-		return A
-	}
-	return append(A[:index], A[index+1:]...)
+	return sliceutil.DeleteAt(A, index)
 }
 
 // 获取牌的颜色和牌值
