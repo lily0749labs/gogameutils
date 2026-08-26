@@ -48,9 +48,8 @@ func Read(conn net.Conn) (int, []byte, error) {
 	_, err = io.ReadFull(conn, data)
 	if err != nil {
 		return 0, nil, err
-	} else {
-		return 0, data, nil
 	}
+	return len(data), data, nil
 }
 
 // 只读取1024的buf

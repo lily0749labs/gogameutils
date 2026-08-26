@@ -5,62 +5,36 @@ import (
 	"time"
 )
 
-/*
-*测试生产者
- */
-func TestClock(t *testing.T) {
+func TestClockExecutesRequestedCount(t *testing.T) {
 	timer := CreateClock()
-	ch := make(chan bool)
-	timer.AddClock(
-		time.Second,
-		0,
-		0,
-		func(inter any) {
-			// log.Trace("执行重复定时器")
-		},
-		10,
-	)
-	timer.AddClock(
-		time.Second*5,
-		0,
-		1,
-		func(inter any) {
-			// log.Trace("执行单次定时器1")
-			timer.AddClock(
-				time.Second*5,
-				0,
-				1,
-				func(inter any) {
-					// log.Trace("执行单次定时器2")
-					ch <- true
-				},
-				10,
-			)
-		},
-		10,
-	)
-	<-ch
-	timer.Reset()
-	timer.AddClock(
-		time.Second,
-		0,
-		0,
-		func(inter any) {
-			// log.Trace("执行重复定时器2")
-		},
-		10,
-	)
-	timer.AddClock(
-		time.Second*5,
-		0,
-		1,
-		func(inter any) {
-			// log.Trace("执行单次定时器3")
-			ch <- true
-		},
-		10,
-	)
-	<-ch
+	t.Cleanup(timer.Close)
+
+	executed := make(chan int, 2)
+	job, ok := timer.AddClock(5*time.Millisecond, 1, 2, func(param any) {
+		executed <- param.(int)
+	}, 42)
+	if !ok || job == nil {
+		t.Fatal("AddClock() did not add a job")
+	}
+
+	deadline := time.After(time.Second)
+	for i := 0; i < 2; i++ {
+		select {
+		case got := <-executed:
+			if got != 42 {
+				t.Fatalf("callback parameter = %d, want 42", got)
+			}
+		case <-deadline:
+			t.Fatalf("timed out after %d callback(s)", i)
+		}
+	}
+}
+
+func TestClockRejectsJobsAfterClose(t *testing.T) {
+	timer := CreateClock()
 	timer.Close()
-	time.Sleep(time.Second * 5)
+
+	if job, ok := timer.AddClock(time.Millisecond, 1, 1, func(any) {}, nil); ok || job != nil {
+		t.Fatalf("AddClock() after Close() = (%v, %t), want (nil, false)", job, ok)
+	}
 }

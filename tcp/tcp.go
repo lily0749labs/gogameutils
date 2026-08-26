@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"gogameutils/tcp/inter"
+	"github.com/lily0749labs/gogameutils/tcp/inter"
 )
 
 /*

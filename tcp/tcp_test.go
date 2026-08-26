@@ -1,70 +1,72 @@
 package tcp
 
 import (
-	"gogameutils/tcp/io"
-
-	commtime "github.com/lily0749labs/goutils/time"
-
-	"fmt"
 	"net"
 	"testing"
-	"time"
+
+	"github.com/lily0749labs/gogameutils/tcp/inter"
 )
 
-type TestServer struct {
-	server *TcpServer
-}
+type testServer struct{}
 
-func Test_Server(t *testing.T) {
-	testServer := &TestServer{}
-	server := NewTcpServer("0.0.0.0", 9999, testServer)
-	testServer.server = server
-	fmt.Println("server run")
-	server.Run()
-}
+var _ inter.Server = (*testServer)(nil)
 
-func (ts *TestServer) Accept(conn net.Conn) {
-	for {
-		_, recvData, err := io.Read(conn)
-		if err != nil {
-			conn.Close()
-			return
-		}
-		fmt.Println(string(recvData))
-	}
-}
+func (*testServer) Accept(net.Conn) {}
+func (*testServer) Close(net.Conn)  {}
+func (*testServer) Error(error)     {}
+func (*testServer) Exit()           {}
 
-func (ts *TestServer) Close(conn net.Conn) {
-	fmt.Println("close")
-	//ts.server.Close()
-}
-func (ts *TestServer) Error(err error) {
-	fmt.Println("recv err ", err)
-}
-
-func (ts *TestServer) Exit() {
-	fmt.Println("程序结束开始善后处理 ")
-}
-
-func Test_Client(t *testing.T) {
-	conn, err := NewTcpClient("127.0.0.1:9999")
+func TestNewTcpClient(t *testing.T) {
+	listener, err := net.Listen("tcp4", "127.0.0.1:0")
 	if err != nil {
-		fmt.Println(err)
-		return
+		t.Fatalf("net.Listen() error = %v", err)
 	}
-	defer conn.Close()
-	n := 0
-	t1 := commtime.Time.NowTime()
-	for {
-		_, err := io.Write(conn, []byte(fmt.Sprintf("hello%d", n)))
-		if err != nil {
-			fmt.Println(err)
-			return
+	defer listener.Close()
+
+	accepted := make(chan error, 1)
+	go func() {
+		conn, err := listener.Accept()
+		if err == nil {
+			conn.Close()
 		}
-		n++
-		if (time.Since(t1).Nanoseconds()) >= 1000000 {
-			return
-		}
-		//time.Sleep(time.Microsecond)
+		accepted <- err
+	}()
+
+	conn, err := NewTcpClient(listener.Addr().String())
+	if err != nil {
+		t.Fatalf("NewTcpClient() error = %v", err)
+	}
+	conn.Close()
+	if err := <-accepted; err != nil {
+		t.Fatalf("Accept() error = %v", err)
+	}
+}
+
+func TestNewTcpServer(t *testing.T) {
+	server := NewTcpServer("127.0.0.1", 8080, &testServer{})
+	if server.ip != "127.0.0.1" || server.port != 8080 {
+		t.Fatalf("NewTcpServer() address = %s:%d", server.ip, server.port)
+	}
+}
+
+func TestNewTcpServerRejectsInvalidAddress(t *testing.T) {
+	tests := []struct {
+		name string
+		ip   string
+		port int
+	}{
+		{name: "invalid IP", ip: "not-an-ip", port: 8080},
+		{name: "invalid port", ip: "127.0.0.1", port: 0},
+	}
+
+	for _, tc := range tests {
+		t.Run(tc.name, func(t *testing.T) {
+			defer func() {
+				if recover() == nil {
+					t.Fatal("NewTcpServer() did not panic")
+				}
+			}()
+			NewTcpServer(tc.ip, tc.port, &testServer{})
+		})
 	}
 }
