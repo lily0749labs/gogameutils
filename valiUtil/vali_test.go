@@ -34,34 +34,34 @@ func TestValidateData(t *testing.T) {
 func TestValidatePhone(t *testing.T) {
 	t.Parallel()
 
-	// tests := []struct {
-	// 	value string
-	// 	want  bool
-	// }{
-	// 	{value: "13800138000", want: true},
-	// 	{value: "010-12345678", want: true},
-	// 	{value: "01012345678", want: true},
-	// 	{value: "11111111111", want: false},
-	// 	{value: "12345", want: false},
-	// }
+	tests := []struct {
+		value string
+		want  bool
+	}{
+		{value: "13800138000", want: true},
+		{value: "010-12345678", want: true},
+		{value: "01012345678", want: true},
+		{value: "11111111111", want: false},
+		{value: "12345", want: false},
+	}
 
-	// for _, tc := range tests {
-	// 	if got := ValidatePhone(tc.value); got != tc.want {
-	// 		t.Errorf("ValidatePhone(%q) = %t, want %t", tc.value, got, tc.want)
-	// 	}
-	// }
+	for _, tc := range tests {
+		if got := ValidatePhone(tc.value); got != tc.want {
+			t.Errorf("ValidatePhone(%q) = %t, want %t", tc.value, got, tc.want)
+		}
+	}
 }
 
 func TestValidateIDCard(t *testing.T) {
 	t.Parallel()
 
-	// if ok, err := ValidateIdCard("110102197809193026"); !ok || err != nil {
-	// 	t.Fatalf("ValidateIdCard(valid) = (%t, %v), want (true, nil)", ok, err)
-	// }
-	// if ok, err := ValidateIdCard("123456789012345678"); ok || err == nil {
-	// 	t.Fatalf("ValidateIdCard(invalid) = (%t, %v), want (false, error)", ok, err)
-	// }
-	// if ok, err := ValidateIdCard("123"); ok || err == nil {
-	// 	t.Fatalf("ValidateIdCard(short) = (%t, %v), want (false, error)", ok, err)
-	// }
+	if ok, err := ValidateIdCard("110102197809193026"); !ok || err != nil {
+		t.Fatalf("ValidateIdCard(valid) = (%t, %v), want (true, nil)", ok, err)
+	}
+	if ok, err := ValidateIdCard("123456789012345678"); ok || err == nil {
+		t.Fatalf("ValidateIdCard(invalid) = (%t, %v), want (false, error)", ok, err)
+	}
+	if ok, err := ValidateIdCard("123"); ok || err == nil {
+		t.Fatalf("ValidateIdCard(short) = (%t, %v), want (false, error)", ok, err)
+	}
 }
