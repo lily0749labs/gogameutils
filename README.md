@@ -16,6 +16,7 @@ Go 1.25 或更高版本。
 
 | 包 | 用途 |
 | --- | --- |
+| `accountUtil` | 玩家昵称、短信验证码和初始密码生成 |
 | `algoUtil` | 三张牌牌型判断与指定牌型发牌 |
 | `pokerUtil` | 扑克牌堆、洗牌、发牌和金花牌型编码 |
 | `behavior` | 由 JSON 定义条件、概率与动作节点的行为树 |
@@ -29,6 +30,7 @@ Go 1.25 或更高版本。
 | `lockUtil` | `sync.RWMutex` 封装 |
 | `queue` | 带超时的内存队列 |
 | `recover` | panic 恢复辅助 |
+| `httpUtil` | JSON HTTP 请求 |
 | `valiUtil` | 常用参数与格式校验 |
 
 ## 快速开始

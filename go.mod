@@ -4,7 +4,7 @@ go 1.25.0
 
 require (
 	github.com/gorilla/websocket v1.5.3
-	github.com/lily0749labs/goutils v0.3.0
+	github.com/lily0749labs/goutils v0.0.0-00010101000000-000000000000
 	github.com/redis/go-redis/v9 v9.7.3
 	gorm.io/driver/mysql v1.5.7
 	gorm.io/driver/postgres v1.5.11
@@ -27,3 +27,5 @@ require (
 	golang.org/x/sync v0.22.0 // indirect
 	golang.org/x/text v0.41.0 // indirect
 )
+
+replace github.com/lily0749labs/goutils => ../goutils
