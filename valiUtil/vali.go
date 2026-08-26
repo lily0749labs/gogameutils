@@ -3,11 +3,8 @@ package valiUtil
 //验证规则相关
 
 import (
-	"errors"
-	"unicode"
-
 	maputil "github.com/lily0749labs/goutils/maps"
-	validutil "github.com/lily0749labs/goutils/valid"
+	"unicode"
 )
 
 type Rules struct {
@@ -33,22 +30,22 @@ func ValidateData(v_data map[string]any, rules []Rules) (bool, string) {
 /*
 *验证电话号码是否正确
  */
-func ValidatePhone(phone string) bool {
-	return validutil.Valid.Mobile(phone) || validutil.Valid.Telephone(phone)
-}
+// func ValidatePhone(phone string) bool {
+// 	return validutil.Valid.Mobile(phone) || validutil.Valid.Telephone(phone)
+// }
 
 /*
 *验证身份证是否正确
  */
-func ValidateIdCard(idCard string) (bool, error) {
-	if len(idCard) != 18 {
-		return false, errors.New("必须要输入18位的身份证号码")
-	}
-	if !validutil.Valid.IDCard18(idCard) {
-		return false, errors.New("身份证号码不正确")
-	}
-	return true, nil
-}
+// func ValidateIdCard(idCard string) (bool, error) {
+// 	if len(idCard) != 18 {
+// 		return false, errors.New("必须要输入18位的身份证号码")
+// 	}
+// 	if !validutil.Valid.IDCard18(idCard) {
+// 		return false, errors.New("身份证号码不正确")
+// 	}
+// 	return true, nil
+// }
 
 /*
 判断是否为符号
