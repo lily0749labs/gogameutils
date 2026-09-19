@@ -1,9 +1,10 @@
 package clockUtil
 
 import (
-	commtime "github.com/lily0749labs/goutils/time"
 	"sync"
 	"time"
+
+	commtime "github.com/lily0749labs/goutils/time"
 )
 
 const (

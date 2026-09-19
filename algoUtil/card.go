@@ -2,11 +2,12 @@ package algoUtil
 
 import (
 	"fmt"
-	"github.com/lily0749labs/goutils/rand"
-	sliceutil "github.com/lily0749labs/goutils/slice"
 	"math"
 	mathrand "math/rand"
 	"strconv"
+
+	"github.com/lily0749labs/goutils/rand"
+	sliceutil "github.com/lily0749labs/goutils/slice"
 )
 
 const (
